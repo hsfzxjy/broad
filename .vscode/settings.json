@@ -1,0 +1,13 @@
+{
+    "go.toolsEnvVars": {
+        "GOEXPERIMENT": "synctest"
+    },
+    "go.testEnvVars": {
+        "GOEXPERIMENT": "synctest"
+    },
+    "gopls": {
+        "build.env": {
+            "GOEXPERIMENT": "synctest"
+        },
+    }
+}
