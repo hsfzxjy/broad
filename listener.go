@@ -7,7 +7,7 @@ import (
 
 // A [Listener] receives items in order from a [Caster] that are pushed after the moment the [Listener] was created.
 //
-// [Listener] provides [Listener.Next], [Listener.NextCtx], [Listener.Iter], and [Listener.IterCtx] methods to yield items, depending on use cases.
+// [Listener] provides [Listener.Next], [Listener.NextCtx], [Listener.Iter], [Listener.IterCtx] and [Listener.IterUntilBlocked] methods to yield items, depending on use cases.
 //
 // It's NOT SAFE to call [Listener.Next]* or [Listener.Iter]* concurrently on the same [Listener] instance.
 // However, concurrent use of multiple [Listener] instances is safe.
@@ -134,11 +134,28 @@ func (l *Listener[T]) IterCtx(ctx context.Context) iter.Seq[T] {
 
 // Iter returns an iter.Seq[T] that yields items from the [Caster].
 //
-// The returned iterator runs until the [Caster] is closed or all items are consumed.
+// The returned iterator runs until the [Caster] is closed and all items are consumed.
 func (l *Listener[T]) Iter() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for {
 			item, ok := l.next(nil)
+			if !ok {
+				break
+			}
+			if !yield(*item) {
+				break
+			}
+		}
+	}
+}
+
+// IterUntilBlocked returns an iter.Seq[T] that yields items from the [Caster].
+//
+// The returned iterator runs until no unconsumed items left.
+func (l *Listener[T]) IterUntilBlocked() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for {
+			item, ok := l.next(closedNotifier)
 			if !ok {
 				break
 			}

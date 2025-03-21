@@ -119,6 +119,17 @@ func TestIterCtx(t *testing.T) {
 	}
 }
 
+func TestIterUntilBlocked(t *testing.T) {
+	c := broad.New[int]()
+	out := c.Listen()
+	c.PushSlice([]int{1, 2, 3})
+	var items []int
+	for i := range out.IterUntilBlocked() {
+		items = append(items, i)
+	}
+	assert.Equal(t, []int{1, 2, 3}, items)
+}
+
 var bmItemCounts = [...]int{16, 32, 64, 128, 256}
 
 func benchmarkWithCounts(b *testing.B, f func(*testing.B, int)) {
