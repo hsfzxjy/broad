@@ -1,5 +1,5 @@
 <center><h1>broad</h1></center>
-<small><center><em>An ergonomic yet efficient broadcaster library for Go.</em></center></small>
+<center><small><em>An ergonomic yet efficient broadcaster library for Go.</em></small></center>
 
 `broad.Caster[T]` provides an ergonomic yet efficient solution to broadcast messages to multiple listeners in Go. It’s carefully designed to sidestep common pitfalls of channel-based broadcasting, including:
 
