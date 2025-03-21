@@ -1,4 +1,4 @@
-module github.com/hsfzxjy/lq
+module github.com/hsfzxjy/broad
 
 go 1.24.0
 

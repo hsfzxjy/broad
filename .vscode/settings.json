@@ -9,5 +9,6 @@
         "build.env": {
             "GOEXPERIMENT": "synctest"
         },
-    }
+    },
+    "OpenCL.server.deviceID": 2360523922
 }
